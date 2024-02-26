@@ -36,8 +36,6 @@ int main(int argc, char *const *argv)
 
     Args arguments = check_args(argc, argv);
     
-
-    signal(SIGINT, sig_handler);
     signal(SIGPIPE, sig_handler);
 
     // ---------- Read command line
@@ -57,7 +55,7 @@ int main(int argc, char *const *argv)
 	while (1) {	/* break with ^D or ^Z */
         // TODO: hashify
         character = getch();
-
+        printf("%d", character);
         switch (character)
         {
         case '\n':
@@ -90,6 +88,12 @@ int main(int argc, char *const *argv)
             del_char(buf, len);
             len = (len > 0) ? len - 1 : 0;
             refresh_line(PROMPT, buf, len + 1 + prompt_len);
+            break;
+        case '^':
+            printf("\n");
+            show_line(PROMPT);
+            memset(buf, 0, MAX_COMMAND_LENGTH);
+            len = 0, max_len = 0, n_tabs = 0;
             break;
         case 27:
             getch(); // Remove the [
@@ -180,10 +184,14 @@ Args check_args(int argc, char *const *argv) {
 
 void sig_handler(int sig) {
 	switch (sig) {
-    case SIGINT:
     case SIGPIPE:
         has_to_exit = 1;
         break;
+    // case SIGINT:
+    //     printf("^C\n");
+    //     show_line(PROMPT);
+    //     // FIX: clean buffer
+    //     break;
 	default:
 		break;
 	}

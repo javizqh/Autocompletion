@@ -1,12 +1,14 @@
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <err.h>
 #include <signal.h>
 #include <getopt.h>
-#include <unistd.h>
 #include <string.h>
 #include <termios.h>
+#include <signal.h>
 #include <sys/ioctl.h>
+#include<errno.h>
 
 #define MAX_PROMPT_LENGTH 128
 #define MAX_COMMAND_LENGTH 1024
